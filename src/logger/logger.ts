@@ -12,10 +12,10 @@ export const logger = pino({
     targets: [
       { target: 'pino-pretty', options: { colorize: true } },
       { target: 'pino/file', options: { destination: 'logs/app.log' } },
-      {
-        target: 'pino/file',
-        options: { destination: 'logs/errors.log', level: 'error' },
-      },
+      // {
+      //   target: 'pino/file',
+      //   options: { destination: 'logs/errors.log', level: 'error' },
+      // },
     ],
   },
 });

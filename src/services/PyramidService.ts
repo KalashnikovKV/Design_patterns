@@ -17,17 +17,24 @@ export class PyramidService {
   }
 
   static getVolumeRatio(p: Pyramid, plane: 'xy' | 'yz' | 'zx'): number {
-    if (plane === 'xy' && p.baseCenter.z > 0) {
-      const truncatedHeight = p.height - p.baseCenter.z;
-      if (truncatedHeight <= 0) return 0;
-      const truncatedVolume = (1 / 3) * p.baseLength ** 2 * truncatedHeight;
-      return truncatedVolume / this.getVolume(p);
-    }
-    if (plane === 'yz' && p.baseCenter.x > 0) {
-      return 0;
-    }
-    if (plane === 'zx' && p.baseCenter.y > 0) {
-      return 0;
+    switch (plane) {
+      case 'xy': {
+        if (p.baseCenter.z > 0) return 0;
+        if (p.baseCenter.z + p.height < 0) return 0;
+        const heightAbovePlane = p.baseCenter.z + p.height;
+        return (heightAbovePlane / p.height) ** 3;
+      }
+      case 'yz':
+      case 'zx': {
+        const coord = plane === 'yz' ? p.baseCenter.x : p.baseCenter.y;
+        const halfBase = p.baseLength / 2;
+
+        if (Math.abs(coord) >= halfBase) {
+          return coord > 0 ? 0.75 : 0.25;
+        }
+
+        return coord > 0 ? 0.75 : 0.25;
+      }
     }
     return 1;
   }

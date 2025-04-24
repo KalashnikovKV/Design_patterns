@@ -22,18 +22,46 @@ lines.forEach((line, index) => {
     if (shape instanceof Rectangle) {
       if (!RectangleValidator.isValid(shape))
         throw new InvalidShapeError('Невалидный прямоугольник');
+
+      const area = RectangleService.getArea(shape);
+      const perimeter = RectangleService.getPerimeter(shape);
+      const isSquare = RectangleService.isSquare(shape);
+      const isRhombus = RectangleService.isRhombus(shape);
+      const isTrapezoid = RectangleService.isTrapezoid(shape);
+      const isConvex = RectangleService.isConvex(shape);
+
       logger.info(
-        `✔ ${shape.name}: Площадь = ${RectangleService.getArea(
-          shape
-        )}, Периметр = ${RectangleService.getPerimeter(shape)}`
+        `✔ ${shape.name}:
+        Площадь = ${area.toFixed(2)}
+        Периметр = ${perimeter.toFixed(2)}
+        Является ли квадратом: ${isSquare ? 'Да' : 'Нет'}
+        Является ли ромбом: ${isRhombus ? 'Да' : 'Нет'}
+        Является ли трапецией: ${isTrapezoid ? 'Да' : 'Нет'}
+        Является ли выпуклым: ${isConvex ? 'Да' : 'Нет'}
+        Точки образуют прямоугольник: ${
+          RectangleValidator.isValid(shape) ? 'Да' : 'Нет'
+        }`
       );
     } else if (shape instanceof Pyramid) {
       if (!PyramidValidator.isValid(shape))
         throw new InvalidShapeError('Невалидная пирамида');
+
+      const area = PyramidService.getArea(shape);
+      const volume = PyramidService.getVolume(shape);
+      const isBaseOnPlane = PyramidService.isBaseOnPlane(shape);
+      const volumeRatioXY = PyramidService.getVolumeRatio(shape, 'xy');
+      const volumeRatioYZ = PyramidService.getVolumeRatio(shape, 'yz');
+      const volumeRatioZX = PyramidService.getVolumeRatio(shape, 'zx');
+
       logger.info(
-        `✔ ${shape.name}: Площадь = ${PyramidService.getArea(
-          shape
-        )}, Объём = ${PyramidService.getVolume(shape)}`
+        `✔ ${shape.name}:
+        Площадь поверхности = ${area.toFixed(2)}
+        Объём = ${volume.toFixed(2)}
+        Основание на координатной плоскости: ${isBaseOnPlane ? 'Да' : 'Нет'}
+        Соотношение объёмов при сечении:
+          - Плоскостью XY: ${volumeRatioXY.toFixed(2)}
+          - Плоскостью YZ: ${volumeRatioYZ.toFixed(2)}
+          - Плоскостью ZX: ${volumeRatioZX.toFixed(2)}`
       );
     }
   } catch (err) {
