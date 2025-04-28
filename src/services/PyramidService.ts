@@ -1,37 +1,45 @@
 import { Pyramid } from '../entities/Pyramid';
 
 export class PyramidService {
-  static getArea(p: Pyramid): number {
-    const baseArea = p.baseLength ** 2;
+  constructor(private pyramid: Pyramid) {}
 
-    const slantHeight = Math.sqrt((p.baseLength / 2) ** 2 + p.height ** 2);
+  getArea(): number {
+    const baseArea = this.pyramid.baseLength ** 2;
 
-    const lateralArea = 4 * ((p.baseLength * slantHeight) / 2);
+    const slantHeight = Math.sqrt(
+      (this.pyramid.baseLength / 2) ** 2 + this.pyramid.height ** 2
+    );
+
+    const lateralArea = 4 * ((this.pyramid.baseLength * slantHeight) / 2);
 
     return baseArea + lateralArea;
   }
 
-  static getVolume(p: Pyramid): number {
-    return (1 / 3) * p.baseLength ** 2 * p.height;
+  getVolume(): number {
+    return (1 / 3) * this.pyramid.baseLength ** 2 * this.pyramid.height;
   }
 
-  static isBaseOnPlane(p: Pyramid): boolean {
-    return p.baseCenter.z === 0;
+  isBaseOnPlane(): boolean {
+    return this.pyramid.baseCenter.z === 0;
   }
 
-  static getVolumeRatio(p: Pyramid, plane: 'xy' | 'yz' | 'zx'): number {
+  getVolumeRatio(plane: 'xy' | 'yz' | 'zx'): number {
     switch (plane) {
       case 'xy': {
-        if (p.baseCenter.z <= 0) return 1;
-        if (p.baseCenter.z >= p.height) return 0;
+        if (this.pyramid.baseCenter.z <= 0) return 1;
+        if (this.pyramid.baseCenter.z >= this.pyramid.height) return 0;
 
-        const heightAbovePlane = p.height - p.baseCenter.z;
-        return (heightAbovePlane / p.height) ** 3;
+        const heightAbovePlane =
+          this.pyramid.height - this.pyramid.baseCenter.z;
+        return (heightAbovePlane / this.pyramid.height) ** 3;
       }
       case 'yz':
       case 'zx': {
-        const coord = plane === 'yz' ? p.baseCenter.x : p.baseCenter.y;
-        const halfBase = p.baseLength / 2;
+        const coord =
+          plane === 'yz'
+            ? this.pyramid.baseCenter.x
+            : this.pyramid.baseCenter.y;
+        const halfBase = this.pyramid.baseLength / 2;
 
         if (Math.abs(coord) >= halfBase) {
           return coord > 0 ? 0.75 : 0.25;
@@ -43,8 +51,8 @@ export class PyramidService {
     return 1;
   }
 
-  static intersectsAxis(p: Pyramid, distance: number): boolean {
-    const { x, y, z } = p.baseCenter;
+  intersectsAxis(distance: number): boolean {
+    const { x, y, z } = this.pyramid.baseCenter;
     return (
       Math.abs(x) <= distance ||
       Math.abs(y) <= distance ||

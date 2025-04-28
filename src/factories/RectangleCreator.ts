@@ -1,10 +1,14 @@
-import { Point2D } from '../entities/points/Point2D';
 import { Rectangle } from '../entities/Rectangle';
+import { Point2D } from '../entities/points/Point2D';
 import { Shape } from '../entities/Shape';
-import { ShapeFactory } from './ShapeFactory';
+import { Creator } from './Creator';
 
-export class RectangleFactory extends ShapeFactory {
-  createShape(name: string, data: string): Shape | null {
+export class RectangleCreator extends Creator {
+  protected getPattern(): RegExp {
+    return /^(rectangle)\s+«(.+)»$/i;
+  }
+
+  factoryMethod(name: string, data: string): Shape | null {
     const parts = data.trim().split(/\s+/).map(Number);
     if (parts.length !== 4 || parts.some(isNaN)) return null;
     return new Rectangle(

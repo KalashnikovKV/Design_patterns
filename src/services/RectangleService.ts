@@ -1,43 +1,47 @@
 import { Rectangle } from '../entities/Rectangle';
 
 export class RectangleService {
-  static getArea(rect: Rectangle): number {
-    const width = Math.abs(rect.p1.x - rect.p2.x);
-    const height = Math.abs(rect.p1.y - rect.p2.y);
+  constructor(private rectangle: Rectangle) {}
+
+  getArea(): number {
+    const width = Math.abs(this.rectangle.p1.x - this.rectangle.p2.x);
+    const height = Math.abs(this.rectangle.p1.y - this.rectangle.p2.y);
     return width * height;
   }
 
-  static getPerimeter(rect: Rectangle): number {
-    const width = Math.abs(rect.p1.x - rect.p2.x);
-    const height = Math.abs(rect.p1.y - rect.p2.y);
+  getPerimeter(): number {
+    const width = Math.abs(this.rectangle.p1.x - this.rectangle.p2.x);
+    const height = Math.abs(this.rectangle.p1.y - this.rectangle.p2.y);
     return 2 * (width + height);
   }
 
-  static isSquare(rect: Rectangle): boolean {
-    const width = Math.abs(rect.p1.x - rect.p2.x);
-    const height = Math.abs(rect.p1.y - rect.p2.y);
+  isSquare(): boolean {
+    const width = Math.abs(this.rectangle.p1.x - this.rectangle.p2.x);
+    const height = Math.abs(this.rectangle.p1.y - this.rectangle.p2.y);
     return width === height;
   }
 
-  static isRhombus(rect: Rectangle): boolean {
-    const width = Math.abs(rect.p1.x - rect.p2.x);
-    const height = Math.abs(rect.p1.y - rect.p2.y);
-    return width === height;
+  isRhombus(): boolean {
+    return this.isSquare();
   }
 
-  static isTrapezoid(rect: Rectangle): boolean {
+  isTrapezoid(): boolean {
+    // Прямоугольник всегда является трапецией,
+    // так как имеет две пары параллельных сторон
     return true;
   }
 
-  static isConvex(rect: Rectangle): boolean {
+  isConvex(): boolean {
+    // Прямоугольник всегда является выпуклым многоугольником,
+    // так как все его углы равны 90 градусов
     return true;
   }
 
-  static intersectsAxis(rect: Rectangle, distance: number): boolean {
-    const minX = Math.min(rect.p1.x, rect.p2.x);
-    const maxX = Math.max(rect.p1.x, rect.p2.x);
-    const minY = Math.min(rect.p1.y, rect.p2.y);
-    const maxY = Math.max(rect.p1.y, rect.p2.y);
+  intersectsAxis(distance: number): boolean {
+    const minX = Math.min(this.rectangle.p1.x, this.rectangle.p2.x);
+    const maxX = Math.max(this.rectangle.p1.x, this.rectangle.p2.x);
+    const minY = Math.min(this.rectangle.p1.y, this.rectangle.p2.y);
+    const maxY = Math.max(this.rectangle.p1.y, this.rectangle.p2.y);
 
     return (
       (minX <= distance && maxX >= -distance) ||

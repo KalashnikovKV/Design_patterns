@@ -1,26 +1,19 @@
-import { RectangleFactory } from '../factories/RectangleFactory';
-import { PyramidFactory } from '../factories/PyramidFactory';
+import { RectangleCreator } from '../factories/RectangleCreator';
+import { PyramidCreator } from '../factories/PyramidCreator';
 import { Shape } from '../entities/Shape';
-import { ShapeFactory } from '../factories/ShapeFactory';
-
-const SHAPE_REGEX = /^(rectangle|pyramid)\s+«(.+)»$/i;
+import { Creator } from '../factories/Creator';
 
 export class ShapeParser {
-  private static factories: Map<string, ShapeFactory> = new Map([
-    ['rectangle', new RectangleFactory()],
-    ['pyramid', new PyramidFactory()],
-  ]);
+  private static creators: Creator[] = [
+    new RectangleCreator(),
+    new PyramidCreator(),
+  ];
 
   static parse(line: string): Shape | null {
-    const match = line.trim().match(SHAPE_REGEX);
-    if (!match) return null;
-
-    const [_, type, rawData] = match;
-    const name = `${type}_${Math.floor(Math.random() * 10000)}`;
-    const factory = this.factories.get(type.toLowerCase());
-
-    if (!factory) return null;
-
-    return factory.createShape(name, rawData.trim());
+    for (const creator of this.creators) {
+      const shape = creator.create(line);
+      if (shape) return shape;
+    }
+    return null;
   }
 }

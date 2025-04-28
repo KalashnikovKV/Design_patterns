@@ -23,21 +23,15 @@ lines.forEach((line, index) => {
       if (!RectangleValidator.isValid(shape))
         throw new InvalidShapeError('Невалидный прямоугольник');
 
-      const area = RectangleService.getArea(shape);
-      const perimeter = RectangleService.getPerimeter(shape);
-      const isSquare = RectangleService.isSquare(shape);
-      const isRhombus = RectangleService.isRhombus(shape);
-      const isTrapezoid = RectangleService.isTrapezoid(shape);
-      const isConvex = RectangleService.isConvex(shape);
-
+      const service = new RectangleService(shape);
       logger.info(
         `✔ ${shape.name}:
-        Площадь = ${area.toFixed(2)}
-        Периметр = ${perimeter.toFixed(2)}
-        Является ли квадратом: ${isSquare ? 'Да' : 'Нет'}
-        Является ли ромбом: ${isRhombus ? 'Да' : 'Нет'}
-        Является ли трапецией: ${isTrapezoid ? 'Да' : 'Нет'}
-        Является ли выпуклым: ${isConvex ? 'Да' : 'Нет'}
+        Площадь = ${service.getArea().toFixed(2)}
+        Периметр = ${service.getPerimeter().toFixed(2)}
+        Является ли квадратом: ${service.isSquare() ? 'Да' : 'Нет'}
+        Является ли ромбом: ${service.isRhombus() ? 'Да' : 'Нет'}
+        Является ли трапецией: ${service.isTrapezoid() ? 'Да' : 'Нет'}
+        Является ли выпуклым: ${service.isConvex() ? 'Да' : 'Нет'}
         Точки образуют прямоугольник: ${
           RectangleValidator.isValid(shape) ? 'Да' : 'Нет'
         }`
@@ -46,22 +40,18 @@ lines.forEach((line, index) => {
       if (!PyramidValidator.isValid(shape))
         throw new InvalidShapeError('Невалидная пирамида');
 
-      const area = PyramidService.getArea(shape);
-      const volume = PyramidService.getVolume(shape);
-      const isBaseOnPlane = PyramidService.isBaseOnPlane(shape);
-      const volumeRatioXY = PyramidService.getVolumeRatio(shape, 'xy');
-      const volumeRatioYZ = PyramidService.getVolumeRatio(shape, 'yz');
-      const volumeRatioZX = PyramidService.getVolumeRatio(shape, 'zx');
-
+      const service = new PyramidService(shape);
       logger.info(
         `✔ ${shape.name}:
-        Площадь поверхности = ${area.toFixed(2)}
-        Объём = ${volume.toFixed(2)}
-        Основание на координатной плоскости: ${isBaseOnPlane ? 'Да' : 'Нет'}
+        Площадь поверхности = ${service.getArea().toFixed(2)}
+        Объём = ${service.getVolume().toFixed(2)}
+        Основание на координатной плоскости: ${
+          service.isBaseOnPlane() ? 'Да' : 'Нет'
+        }
         Соотношение объёмов при сечении:
-          - Плоскостью XY: ${volumeRatioXY.toFixed(2)}
-          - Плоскостью YZ: ${volumeRatioYZ.toFixed(2)}
-          - Плоскостью ZX: ${volumeRatioZX.toFixed(2)}`
+          - Плоскостью XY: ${service.getVolumeRatio('xy').toFixed(2)}
+          - Плоскостью YZ: ${service.getVolumeRatio('yz').toFixed(2)}
+          - Плоскостью ZX: ${service.getVolumeRatio('zx').toFixed(2)}`
       );
     }
   } catch (err) {

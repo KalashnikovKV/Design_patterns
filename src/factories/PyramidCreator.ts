@@ -1,10 +1,14 @@
-import { Point3D } from '../entities/points/Point3D';
 import { Pyramid } from '../entities/Pyramid';
+import { Point3D } from '../entities/points/Point3D';
 import { Shape } from '../entities/Shape';
-import { ShapeFactory } from './ShapeFactory';
+import { Creator } from './Creator';
 
-export class PyramidFactory extends ShapeFactory {
-  createShape(name: string, data: string): Shape | null {
+export class PyramidCreator extends Creator {
+  protected getPattern(): RegExp {
+    return /^(pyramid)\s+«(.+)»$/i;
+  }
+
+  factoryMethod(name: string, data: string): Shape | null {
     const parts = data.trim().split(/\s+/).map(Number);
     if (parts.length !== 4 || parts.some(isNaN)) return null;
     return new Pyramid(
