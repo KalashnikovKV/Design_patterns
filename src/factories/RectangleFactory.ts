@@ -1,9 +1,11 @@
 import { Point } from '../entities/Point';
 import { Rectangle } from '../entities/Rectangle';
+import { Shape } from '../entities/Shape';
+import { ShapeFactory } from './ShapeFactory';
 
-export class RectangleFactory {
-  static createFromString(name: string, input: string): Rectangle | null {
-    const parts = input.trim().split(/\s+/).map(Number);
+export class RectangleFactory extends ShapeFactory {
+  createShape(name: string, data: string): Shape | null {
+    const parts = data.trim().split(/\s+/).map(Number);
     if (parts.length !== 4 || parts.some(isNaN)) return null;
     return new Rectangle(
       name,

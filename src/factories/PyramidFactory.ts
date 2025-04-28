@@ -1,9 +1,11 @@
 import { Point } from '../entities/Point';
 import { Pyramid } from '../entities/Pyramid';
+import { Shape } from '../entities/Shape';
+import { ShapeFactory } from './ShapeFactory';
 
-export class PyramidFactory {
-  static createFromString(name: string, input: string): Pyramid | null {
-    const parts = input.trim().split(/\s+/).map(Number);
+export class PyramidFactory extends ShapeFactory {
+  createShape(name: string, data: string): Shape | null {
+    const parts = data.trim().split(/\s+/).map(Number);
     if (parts.length !== 4 || parts.some(isNaN)) return null;
     return new Pyramid(
       name,
