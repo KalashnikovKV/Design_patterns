@@ -3,8 +3,11 @@ import { Pyramid } from '../entities/Pyramid';
 export class PyramidService {
   static getArea(p: Pyramid): number {
     const baseArea = p.baseLength ** 2;
+
     const slantHeight = Math.sqrt((p.baseLength / 2) ** 2 + p.height ** 2);
-    const lateralArea = 2 * p.baseLength * slantHeight;
+
+    const lateralArea = 4 * ((p.baseLength * slantHeight) / 2);
+
     return baseArea + lateralArea;
   }
 
@@ -19,9 +22,10 @@ export class PyramidService {
   static getVolumeRatio(p: Pyramid, plane: 'xy' | 'yz' | 'zx'): number {
     switch (plane) {
       case 'xy': {
-        if (p.baseCenter.z > 0) return 0;
-        if (p.baseCenter.z + p.height < 0) return 0;
-        const heightAbovePlane = p.baseCenter.z + p.height;
+        if (p.baseCenter.z <= 0) return 1;
+        if (p.baseCenter.z >= p.height) return 0;
+
+        const heightAbovePlane = p.height - p.baseCenter.z;
         return (heightAbovePlane / p.height) ** 3;
       }
       case 'yz':

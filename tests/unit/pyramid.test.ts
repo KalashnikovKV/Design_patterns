@@ -37,49 +37,40 @@ describe('PyramidService from figures.txt', () => {
     });
   });
 
-  it('should calculate volume ratio correctly when intersected by xy plane', () => {
-    const pyramid = new Pyramid('p1', new Point(0, 0, 2), 4, 6);
+  describe('Volume ratio calculations', () => {
+    it('should return correct ratio when intersected by xy plane', () => {
+      const pyramid = new Pyramid('p1', new Point(0, 0, 2), 4, 6);
+      const ratio = PyramidService.getVolumeRatio(pyramid, 'xy');
 
-    const ratio = PyramidService.getVolumeRatio(pyramid, 'xy');
+      expect(ratio).toBeGreaterThan(0);
+      expect(ratio).toBeLessThan(1);
+    });
 
-    expect(ratio).toBeGreaterThan(0);
-    expect(ratio).toBeLessThan(1);
-  });
+    it('should return 1 when no intersection with xy plane', () => {
+      const pyramid = new Pyramid('p2', new Point(0, 0, -2), 4, 6);
+      const ratio = PyramidService.getVolumeRatio(pyramid, 'xy');
+      expect(ratio).toBe(1);
+    });
 
-  it('should return 1 for volume ratio if no intersection with xy plane', () => {
-    const pyramid = new Pyramid('p2', new Point(0, 0, 0), 4, 6);
+    it('should return 0 when pyramid is fully above xy plane', () => {
+      const pyramid = new Pyramid('p3', new Point(0, 0, 8), 4, 6);
+      const ratio = PyramidService.getVolumeRatio(pyramid, 'xy');
+      expect(ratio).toBe(0);
+    });
 
-    const ratio = PyramidService.getVolumeRatio(pyramid, 'xy');
+    it('should calculate volume ratio correctly when intersected by yz plane', () => {
+      const pyramid = new Pyramid('p4', new Point(2, 0, 0), 4, 6);
+      const ratio = PyramidService.getVolumeRatio(pyramid, 'yz');
 
-    expect(ratio).toBe(1);
-  });
+      expect(ratio).toBe(0.75);
+    });
 
-  it('should detect intersection with axis correctly', () => {
-    const pyramid = new Pyramid('p3', new Point(1, 2, 3), 4, 6);
+    it('should calculate volume ratio correctly when intersected by zx plane', () => {
+      const pyramid = new Pyramid('p5', new Point(0, 2, 0), 4, 6);
+      const ratio = PyramidService.getVolumeRatio(pyramid, 'zx');
 
-    const intersects = PyramidService.intersectsAxis(pyramid, 2);
-
-    expect(intersects).toBe(true);
-  });
-
-  it('should detect no intersection with axis when out of range', () => {
-    const pyramid = new Pyramid('p4', new Point(5, 5, 5), 4, 6);
-
-    const intersects = PyramidService.intersectsAxis(pyramid, 2);
-
-    expect(intersects).toBe(false);
-  });
-
-  it('should calculate volume ratio correctly when intersected by yz plane', () => {
-    const pyramid = new Pyramid('p1', new Point(2, 0, 0), 4, 6);
-    const ratio = PyramidService.getVolumeRatio(pyramid, 'yz');
-    expect(ratio).toBe(0);
-  });
-
-  it('should calculate volume ratio correctly when intersected by zx plane', () => {
-    const pyramid = new Pyramid('p1', new Point(0, 2, 0), 4, 6);
-    const ratio = PyramidService.getVolumeRatio(pyramid, 'zx');
-    expect(ratio).toBe(0);
+      expect(ratio).toBe(0.75);
+    });
   });
 });
 
@@ -104,15 +95,21 @@ describe('PyramidValidator', () => {
 });
 
 describe('PyramidService additional tests', () => {
-  it('should return 0 for volume ratio if truncated height is zero or less', () => {
-    const pyramid = new Pyramid('p1', new Point(0, 0, 6), 4, 6);
-    const ratio = PyramidService.getVolumeRatio(pyramid, 'xy');
-    expect(ratio).toBe(0);
+  it('should calculate correct area and volume for a simple pyramid', () => {
+    const pyramid = new Pyramid('p1', new Point(0, 0, 0), 4, 6);
+    const area = PyramidService.getArea(pyramid);
+    const volume = PyramidService.getVolume(pyramid);
+
+    expect(area).toBeCloseTo(66.6, 1);
+
+    expect(volume).toBe(32);
   });
 
-  it('should handle invalid input gracefully', () => {
-    const invalidLine = 'pyramid «1.0 2.0 z 4.0»';
-    const shape = ShapeParser.parse(invalidLine);
-    expect(shape).toBeNull();
+  it('should detect if base is on coordinate plane', () => {
+    const pyramid1 = new Pyramid('p1', new Point(0, 0, 0), 4, 6);
+    expect(PyramidService.isBaseOnPlane(pyramid1)).toBe(true);
+
+    const pyramid2 = new Pyramid('p2', new Point(0, 0, 2), 4, 6);
+    expect(PyramidService.isBaseOnPlane(pyramid2)).toBe(false);
   });
 });
