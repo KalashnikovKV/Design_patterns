@@ -1,22 +1,25 @@
 import { Pyramid } from '../entities/Pyramid';
 
 export class PyramidService {
-  constructor(private pyramid: Pyramid) {}
+  constructor(private readonly pyramid: Pyramid) {}
 
   getArea(): number {
-    const baseArea = this.pyramid.baseLength ** 2;
-
-    const slantHeight = Math.sqrt(
-      (this.pyramid.baseLength / 2) ** 2 + this.pyramid.height ** 2
+    if (!this.pyramid || !this.pyramid.baseCenter || !this.pyramid.baseLength || !this.pyramid.height) {
+      return 0;
+    }
+    const baseArea = this.pyramid.baseLength * this.pyramid.baseLength;
+    const lateralArea = 2 * this.pyramid.baseLength * Math.sqrt(
+      Math.pow(this.pyramid.height, 2) + Math.pow(this.pyramid.baseLength / 2, 2)
     );
-
-    const lateralArea = 4 * ((this.pyramid.baseLength * slantHeight) / 2);
-
     return baseArea + lateralArea;
   }
 
   getVolume(): number {
-    return (1 / 3) * this.pyramid.baseLength ** 2 * this.pyramid.height;
+    if (!this.pyramid || !this.pyramid.baseLength || !this.pyramid.height) {
+      return 0;
+    }
+    const baseArea = this.pyramid.baseLength * this.pyramid.baseLength;
+    return (baseArea * this.pyramid.height) / 3;
   }
 
   isBaseOnPlane(): boolean {

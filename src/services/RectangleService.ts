@@ -1,15 +1,21 @@
 import { Rectangle } from '../entities/Rectangle';
 
 export class RectangleService {
-  constructor(private rectangle: Rectangle) {}
+  constructor(private readonly rectangle: Rectangle) {}
 
   getArea(): number {
+    if (!this.rectangle || !this.rectangle.p1 || !this.rectangle.p2) {
+      return 0;
+    }
     const width = Math.abs(this.rectangle.p1.x - this.rectangle.p2.x);
     const height = Math.abs(this.rectangle.p1.y - this.rectangle.p2.y);
     return width * height;
   }
 
   getPerimeter(): number {
+    if (!this.rectangle || !this.rectangle.p1 || !this.rectangle.p2) {
+      return 0;
+    }
     const width = Math.abs(this.rectangle.p1.x - this.rectangle.p2.x);
     const height = Math.abs(this.rectangle.p1.y - this.rectangle.p2.y);
     return 2 * (width + height);
