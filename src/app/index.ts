@@ -73,7 +73,7 @@ lines.forEach((line, index) => {
   }
 });
 
-logger.info('=== ОТЛАДОЧНАЯ ИНФОРМАЦИЯ ===');
+logger.info('ОТЛАДОЧНАЯ ИНФОРМАЦИЯ');
 const allShapes = repository.findAll();
 logger.info(`Всего фигур в репозитории: ${allShapes.length}`);
 

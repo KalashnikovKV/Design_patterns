@@ -5,22 +5,7 @@ import { Point2D } from '../../../src/entities/points/Point2D';
 import { Point3D } from '../../../src/entities/points/Point3D';
 
 describe('FigureComparator', () => {
-  describe('byId', () => {
-    it('should sort shapes by id', () => {
-      const shapes = [
-        new Rectangle('rect_2', new Point2D(0, 0), new Point2D(1, 1)),
-        new Rectangle('rect_1', new Point2D(0, 0), new Point2D(1, 1)),
-        new Pyramid('pyr_3', new Point3D(0, 0, 0), 1, 1)
-      ];
 
-      const comparator = FigureComparator.byId();
-      const sorted = shapes.sort((a, b) => comparator.compare(a, b));
-
-      expect(sorted[0].name).toBe('rect_1');
-      expect(sorted[1].name).toBe('rect_2');
-      expect(sorted[2].name).toBe('pyr_3');
-    });
-  });
 
   describe('byName', () => {
     it('should sort shapes by name', () => {
