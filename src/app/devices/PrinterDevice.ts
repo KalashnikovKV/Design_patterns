@@ -3,7 +3,6 @@ import { IDevice } from './IDevice';
 export class PrinterDevice implements IDevice {
     drawCircle(x: number, y: number, radius: number): void {
         console.log(`Печатаем круг: позиция (${x}, ${y}), радиус ${radius}`);
-        // Здесь будет реальная логика печати
     }
 
     drawRectangle(x: number, y: number, width: number, height: number): void {
